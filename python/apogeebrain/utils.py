@@ -1,9 +1,11 @@
 import os
 import numpy as np
+import time
 from scipy.special import erf
 from functools import wraps
 from scipy import interpolate
 from scipy.ndimage import median_filter,generic_filter
+import gdown
 
 def datadir():
     """ Return the data/ directory."""
@@ -245,7 +247,7 @@ def download_data(force=False):
             {'id':'1w-vjoiYqUG95mQXNjpJkShyqeBQAlGyp','output':'ann_20pars_4000-5000.pkl'},
             {'id':'1fW4mTgYD3ElrMEUwiANy8bRtpS8MaY2N','output':'ann_20pars_5000-6000.pkl'}]
     
-    # This should take 2-3 minutes on a good connection
+    # This should take ~30 sec on a good connection
     
     # Do the downloading
     t0 = time.time()
