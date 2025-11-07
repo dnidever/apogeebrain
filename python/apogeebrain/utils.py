@@ -232,3 +232,30 @@ def is_binaryfile(filename):
             return False
     except UnicodeDecodeError: # Found non-text data
         return True  
+
+def download_data(force=False):
+    """ Download the data from my Google Drive."""
+
+    # Check if the "done" file is there
+    if os.path.exists(datadir()+'done') and force==False:
+        return
+    
+    data = [{'id':'1a8w5yaghx9NyP9qBzkjcWB8Ui9snV1gU','output':'ann_20pars_3000-3700.pkl'},
+            {'id':'1Ev__LctvhGdWeL_pp3FdlmIZ6DQeXpEC','output':'ann_20pars_3500-4250.pkl'},
+            {'id':'1w-vjoiYqUG95mQXNjpJkShyqeBQAlGyp','output':'ann_20pars_4000-5000.pkl'},
+            {'id':'1fW4mTgYD3ElrMEUwiANy8bRtpS8MaY2N','output':'ann_20pars_5000-6000.pkl'}]
+    
+    # This should take 2-3 minutes on a good connection
+    
+    # Do the downloading
+    t0 = time.time()
+    print('Downloading '+str(len(data))+' apogeebrain data files')
+    for i in range(len(data)):
+        print(str(i+1)+' '+data[i]['output'])
+        fileid = data[i]['id']
+        url = f'https://drive.google.com/uc?id={fileid}'
+        output = datadir()+data[i]['output']  # save to the data directory
+        if os.path.exists(output)==False or force:
+            gdown.download(url, output, quiet=False)
+
+    print('All done in {:.1f} seconds'.format(time.time()-t0))
