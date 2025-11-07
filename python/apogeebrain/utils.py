@@ -245,7 +245,7 @@ def download_data(force=False):
     data = [{'id':'1a8w5yaghx9NyP9qBzkjcWB8Ui9snV1gU','output':'ann_20pars_3000-3700.pkl'},
             {'id':'1Ev__LctvhGdWeL_pp3FdlmIZ6DQeXpEC','output':'ann_20pars_3500-4250.pkl'},
             {'id':'1w-vjoiYqUG95mQXNjpJkShyqeBQAlGyp','output':'ann_20pars_4000-5000.pkl'},
-            {'id':'1fW4mTgYD3ElrMEUwiANy8bRtpS8MaY2N','output':'ann_20pars_5000-6000.pkl'}]
+            {'id':'1fW4mTgYD3ElrMEUwiANy8bRtpS8MaY2N','output':'ann_20pars_4900-6000.pkl'}]
     
     # This should take ~30 sec on a good connection
     

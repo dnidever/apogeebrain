@@ -19,10 +19,11 @@ class APOGEEANNModel():
     
     def __init__(self,spobs=None,loggrelation=False,fluxed=False,verbose=False):
         # Load the ANN models
-        em1 = Emulator.read(utils.datadir()+'ann_22pars_3500-4200.pkl')
-        em2 = Emulator.read(utils.datadir()+'ann_22pars_4000-5000.pkl')
-        em3 = Emulator.read(utils.datadir()+'ann_22pars_4900-6000.pkl')
-        self._models = [em1,em2,em3]
+        em1 = Emulator.read(utils.datadir()+'ann_20pars_3000-3700.pkl')
+        em2 = Emulator.read(utils.datadir()+'ann_20pars_3500-4250.pkl')
+        em3 = Emulator.read(utils.datadir()+'ann_20pars_4000-5000.pkl')
+        em4 = Emulator.read(utils.datadir()+'ann_20pars_4900-6000.pkl')
+        self._models = [em1,em2,em3,em4]
         self.nmodels = len(self._models)
         self.labels = self._models[0].label_names
         self.nlabels = len(self.labels)
@@ -31,10 +32,13 @@ class APOGEEANNModel():
             for j in range(self.nlabels):
                 self._ranges[i,j,:] = [np.min(self._models[i].training_labels[:,j]),
                                        np.max(self._models[i].training_labels[:,j])]
-        self._ranges[0,0,1] = 4100.0  # use 3500-4200 model up to 4100
-        self._ranges[1,0,0] = 4100.0  # use 4000-5000 model from 4100 to 4950
-        self._ranges[1,0,1] = 4950.0        
-        self._ranges[2,0,0] = 4950.0  # use 4900-6000 model from 4950
+        # ranges [Nmodels,Nlabels,lower/upper]
+        self._ranges[0,0,1] = 3600.0  # use 3000-3700 model up to 3600
+        self._ranges[1,0,0] = 3600.0  # use 3500-4200 model from 3600 to 4100
+        self._ranges[1,0,1] = 4100.0  # use 3500-4200 model up to 4100
+        self._ranges[2,0,0] = 4100.0  # use 4000-5000 model from 4100 to 4950
+        self._ranges[2,0,1] = 4950.0  # use 4000-5000 model up to 4950       
+        self._ranges[3,0,0] = 4950.0  # use 4900-6000 model from 4950
         self.ranges = np.zeros((self.nlabels,2),float)
         self.ranges[0,0] = np.min(self._ranges[:,0,:])
         self.ranges[0,1] = np.max(self._ranges[:,0,:])        
@@ -52,8 +56,8 @@ class APOGEEANNModel():
         self._spobs = spobs
         
         # ANN model wavelengths
-        npix_model = 14001
-        self._dispersion = np.arange(npix_model)*0.5+3500.0
+        npix_model = 42001
+        self._dispersion = np.arange(npix_model)*0.05+15000.0
 
 
         # Use logg relation
@@ -248,14 +252,19 @@ class APOGEEANNModel():
 
     def fiducialspec(self):
         """ Default APOGEE resolution and wavelength spectrum."""
-        # Default observed spectrum            
-        wobs_coef = np.array([-1.51930967e-09, -5.46761333e-06,  2.39684716e+00,  8.99994494e+03])            
-        # 3847 observed pixels
-        npix_obs = 3847
-        wobs = np.polyval(wobs_coef,np.arange(npix_obs))
+        # apStar
+        # 8575 observed pixels
+        npix_obs = 8575
+        wobs = 10**(np.arange(npix_obs)*6e-06+4.179)
+        lsfpars = [1.0, 1024, 5, 1, 1, 1, 1, 1, 0,
+                   1.2020653e+00, -2.7707873e-05, -2.2565226e-01,
+                   9.3281589e-05,  2.0480469e-02, -2.6838976e-05, -1.7235745e-01,
+                   5.0808565e-05,  1.2733664e-01,  1.4978128e-06,  6.9676757e-02,
+                   1.0000000e+00,  2.0,  0.0,  0.0,
+                   3.5903741e-02,  6.7804031e+00]
         spobs = Spec1D(np.zeros(npix_obs),wave=wobs,err=np.ones(npix_obs),
-                       lsfpars=np.array([ 1.05094118e+00, -3.37514635e-06]),
-                       lsftype='Gaussian',lsfxtype='wave')        
+                       lsfpars=np.array(lsfpars),
+                       lsftype='GaussHermite',lsfxtype='pixel')        
         return spobs
     
     def __call__(self,pars=None,spobs=None,snr=None,vrel=None,normalize=False,
