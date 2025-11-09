@@ -3,8 +3,8 @@ Installation
 ************
 
 
-Installing Apogeebrain
-====================
+Installing APOGEEBrain
+======================
 
 
 The easiest way to install |apogeebrain| is using pip:

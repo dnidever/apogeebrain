@@ -21,17 +21,6 @@ These are in the range -0.75 < [X/M] < +0.5 for C, N, O, Mg, Si S, Ca, Ti and -0
    gettingstarted
    examples
    modules
-	      
-
-Examples
-========
-
-.. toctree::
-    :maxdepth: 1
-
-    examples
-    gettingstarted
-
 
 *****
 Index
