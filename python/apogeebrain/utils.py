@@ -242,12 +242,12 @@ def download_data(force=False):
     if os.path.exists(datadir()+'done') and force==False:
         return
     
-    data = [{'id':'1a8w5yaghx9NyP9qBzkjcWB8Ui9snV1gU','output':'ann_20pars_3000-3700.pkl'},
-            {'id':'1Ev__LctvhGdWeL_pp3FdlmIZ6DQeXpEC','output':'ann_20pars_3500-4250.pkl'},
-            {'id':'1w-vjoiYqUG95mQXNjpJkShyqeBQAlGyp','output':'ann_20pars_4000-5000.pkl'},
-            {'id':'1fW4mTgYD3ElrMEUwiANy8bRtpS8MaY2N','output':'ann_20pars_4900-6000.pkl'}]
+    data = [{'id':'1oVDc0pcTbnsM5G840gb8V6AOpnKOcFTf','output':'ann_20pars_3000-3600.pkl'},
+            {'id':'1j3MqSoz6LStnt3VEofuOnSoq1Pwqb7Pc','output':'ann_20pars_3400-4000.pkl'},
+            {'id':'1tKy9KoI1kL_VzOuo4jzu2NFFnO94wvir','output':'ann_20pars_3750-5000.pkl'},
+            {'id':'14J239s3KfzdrGYVutPcv3Toxc3tK6O4l','output':'ann_20pars_4750-6000.pkl'}]
     
-    # This should take ~30 sec on a good connection
+    # This should take ~60 sec on a good connection
     
     # Do the downloading
     t0 = time.time()

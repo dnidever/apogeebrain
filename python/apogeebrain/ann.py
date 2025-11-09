@@ -18,11 +18,15 @@ class APOGEEANNModel():
     # Model APOGEE spectra using ANN model
     
     def __init__(self,spobs=None,loggrelation=False,fluxed=False,verbose=False):
+        # Make sure we have the files
+        if os.path.exists(utils.datadir()+'ann_20pars_3000-3600.pkl')==False:
+            print('Need to download the new ANN model files')
+            utils.download_data()
         # Load the ANN models
-        em1 = Emulator.read(utils.datadir()+'ann_20pars_3000-3700.pkl')
-        em2 = Emulator.read(utils.datadir()+'ann_20pars_3500-4250.pkl')
-        em3 = Emulator.read(utils.datadir()+'ann_20pars_4000-5000.pkl')
-        em4 = Emulator.read(utils.datadir()+'ann_20pars_4900-6000.pkl')
+        em1 = Emulator.read(utils.datadir()+'ann_20pars_3000-3600.pkl')
+        em2 = Emulator.read(utils.datadir()+'ann_20pars_3400-4000.pkl')
+        em3 = Emulator.read(utils.datadir()+'ann_20pars_3750-5000.pkl')
+        em4 = Emulator.read(utils.datadir()+'ann_20pars_4750-6000.pkl')
         self._models = [em1,em2,em3,em4]
         self.nmodels = len(self._models)
         self.labels = self._models[0].label_names
@@ -33,12 +37,12 @@ class APOGEEANNModel():
                 self._ranges[i,j,:] = [np.min(self._models[i].training_labels[:,j]),
                                        np.max(self._models[i].training_labels[:,j])]
         # ranges [Nmodels,Nlabels,lower/upper]
-        self._ranges[0,0,1] = 3600.0  # use 3000-3700 model up to 3600
-        self._ranges[1,0,0] = 3600.0  # use 3500-4200 model from 3600 to 4100
-        self._ranges[1,0,1] = 4100.0  # use 3500-4200 model up to 4100
-        self._ranges[2,0,0] = 4100.0  # use 4000-5000 model from 4100 to 4950
-        self._ranges[2,0,1] = 4950.0  # use 4000-5000 model up to 4950       
-        self._ranges[3,0,0] = 4950.0  # use 4900-6000 model from 4950
+        self._ranges[0,0,1] = 3500.0  # use 3000-3600 model up to 3500
+        self._ranges[1,0,0] = 3500.0  # use 3400-4000 model from 3500 to 3875
+        self._ranges[1,0,1] = 3875.0  # use 3400-4000 model up to 3875
+        self._ranges[2,0,0] = 3875.0  # use 3750-5000 model from 3875 to 4875
+        self._ranges[2,0,1] = 4875.0  # use 3750-5000 model up to 4875
+        self._ranges[3,0,0] = 4875.0  # use 4750-6000 model from 4875
         self.ranges = np.zeros((self.nlabels,2),float)
         self.ranges[0,0] = np.min(self._ranges[:,0,:])
         self.ranges[0,1] = np.max(self._ranges[:,0,:])        
@@ -264,7 +268,7 @@ class APOGEEANNModel():
                    3.5903741e-02,  6.7804031e+00]
         spobs = Spec1D(np.zeros(npix_obs),wave=wobs,err=np.ones(npix_obs),
                        lsfpars=np.array(lsfpars),
-                       lsftype='GaussHermite',lsfxtype='pixel')        
+                       lsftype='gauss-hermite',lsfxtype='pixel')        
         return spobs
     
     def __call__(self,pars=None,spobs=None,snr=None,vrel=None,normalize=False,
