@@ -1,9 +1,8 @@
-|logo|
 
 APOGEEBrain
 ==================
 
-Abundance determination for APOGEE optical spectra.
+Abundance determination for APOGEE near-infrared spectra.
 
 Authors
 -------
